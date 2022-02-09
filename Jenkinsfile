@@ -21,7 +21,8 @@ git checkout -b integration
 echo 1.0.0 > changes.txt
 git config --global user.email m.zbytniewski@microsolutions.pl
 git config --global user.name Jenkins
-git commit -am "Update modules"
+git add .
+git commit -m "Update modules"
 git push --set-upstream origin integration
 """  
                     }
