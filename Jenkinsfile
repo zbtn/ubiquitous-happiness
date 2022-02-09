@@ -22,6 +22,7 @@ pipeline {
                         withEnv(["GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -l git -i ${SSH_KEY}"]) {                        
                             sh """
 printenv | sort
+cd 'integration/workspace'
 git checkout -b integration
 echo 1.0.0 > changes.txt
 git add .
