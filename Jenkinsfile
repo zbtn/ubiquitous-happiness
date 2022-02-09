@@ -21,6 +21,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
                         withEnv(["GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -o User=${SSH_USER} -i ${SSH_KEY}"]) {                        
                             sh """
+printenv | sort
 git checkout -b integration
 echo 1.0.0 > changes.txt
 git config --global user.email m.zbytniewski@microsolutions.pl
