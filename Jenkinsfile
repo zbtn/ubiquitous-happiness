@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    options {
+        quietPeriod(0)
+        timestamps
+    }
     stages {
         stage('Setup') {
             steps {
