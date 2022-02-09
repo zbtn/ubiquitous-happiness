@@ -3,10 +3,18 @@ pipeline {
     options {
         quietPeriod(0)
     }
+    environment {
+        REPO_NAME = 'optima-control-runtime'
+        SUBMODULE_NAME = 'ubiquitous-happiness'
+        SUBMODULE
+    }
     stages {
         stage('Setup') {
             steps {
-                echo "Preparing build"
+                script{
+                    env.INTEGRATION_BRANCH = "${REPO_NAME}_${env.BRANCH_NAME}"
+
+                }
             }
         }
         stage('Pre-check') {
@@ -16,29 +24,30 @@ pipeline {
         }
         stage('Prepare integration branch') {
             steps {
-                checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '**']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], userRemoteConfigs: [[credentialsId: 'github-ssh-key', name: 'workspace', url: 'git@github.com:zbtn/reimagined-palm-tree.git']]]
-                dir('integration/workspace') {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                        withEnv(["GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -o User=${SSH_USER} -i ${SSH_KEY}"]) {                        
-                            sh """
-printenv | sort
-git checkout -b integration
-echo 1.0.0 > changes.txt
-git config --global user.email m.zbytniewski@microsolutions.pl
-git config --global user.name Jenkins
+                withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
+                    withEnv(["GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -l git -i ${SSH_KEY}"]) {                        
+                        sh """
+git clone git@github.com:zbtn/reimagined-palm-tree.git integration-workspace
+cd "${WORKSPACE}/integration-workspace"
+git branch -D "${env.INTEGRATION_BRANCH}" || echo "Branch ${env.INTEGRATION_BRANCH} not found."
+git checkout -b "${env.INTEGRATION_BRANCH}"
+git submodule update --init ubiquitous-happiness
 git add .
-git commit -m "Update modules"
+git commit -m "Update submodules"
 git remote -v
-GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o User=${SSH_USER} -i ${SSH_KEY}" git push --set-upstream origin integration
+git push --force --set-upstream origin "${env.INTEGRATION_BRANCH}"
+git log --format=\"%H\" -n 1 > ${WORKSPACE}/last_hash
 """  
-                        }
                     }
                 }
             }
         }
         stage('Trigger integration') {
             steps {
-                build job: 'Integration', parameters: [string(name: 'BRANCH', value: '')]
+                script {
+                    env.TRIGGER_REVISION = readFile "${WORKSPACE}/last_hash"
+                }
+                build job: 'Integration', parameters: [string(name: 'BRANCH', value: 'integration'), string(name: 'REVISION', value: env.TRIGGER_REVISION)]
             }
         }
     }
