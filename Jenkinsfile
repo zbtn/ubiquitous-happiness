@@ -6,6 +6,7 @@ pipeline {
     environment {
         REPO_NAME = 'optima-control-runtime'
         SUBMODULE_NAME = 'ubiquitous-happiness'
+        SUBMODULE
     }
     stages {
         stage('Setup') {
@@ -30,7 +31,7 @@ git clone git@github.com:zbtn/reimagined-palm-tree.git integration-workspace
 cd "${WORKSPACE}/integration-workspace"
 git branch -D "${env.INTEGRATION_BRANCH}" || echo "Branch ${env.INTEGRATION_BRANCH} not found."
 git checkout -b "${env.INTEGRATION_BRANCH}"
-echo 1.0.0 > changes.txt
+git submodule update --init ubiquitous-happiness
 git add .
 git commit -m "Update submodules"
 git remote -v
