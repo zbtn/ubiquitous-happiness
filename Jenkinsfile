@@ -25,11 +25,11 @@ printenv | sort
 git checkout -b integration
 echo 1.0.0 > changes.txt
 git config --global user.email m.zbytniewski@microsolutions.pl
-git config --global user.name mzbytniewski-msol
+git config --global user.name Jenkins
 git add .
 git commit -m "Update modules"
 git remote -v
-GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o User=${SSH_USER} -i ${SSH_KEY}" git push --set-upstream origin integration
+GIT_SSH="ssh -o StrictHostKeyChecking=no -i ${SSH_KEY}" git push --set-upstream origin integration
 echo "No kurwa mać"
 """  
                         }
