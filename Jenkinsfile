@@ -29,6 +29,7 @@ git config --global user.name Jenkins
 git add .
 git commit -m "Update modules"
 git remote -v
+git config --global user.name mzbytniewski-msol
 GIT_SSH="ssh -o StrictHostKeyChecking=no -i ${SSH_KEY}" git push --set-upstream origin integration
 echo "No kurwa mać"
 """  
