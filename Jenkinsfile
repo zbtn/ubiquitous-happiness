@@ -29,7 +29,7 @@ echo 1.0.0 > changes.txt
 git add .
 git commit -m "Update modules"
 git remote -v
-git push --set-upstream origin "${REPO_NAME}_${env.BRANCH_NAME}"
+git push --force --set-upstream origin "${REPO_NAME}_${env.BRANCH_NAME}"
 git log --format=\"%H\" -n 1 > ${WORKSPACE}/last_hash
 """  
                     }
