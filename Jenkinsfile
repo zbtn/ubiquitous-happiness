@@ -20,7 +20,7 @@ pipeline {
                     withEnv(["GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -l git -i ${SSH_KEY}"]) {                        
                         sh """
 git clone git@github.com:zbtn/reimagined-palm-tree.git integration-workspace
-cd "${WORKSPACE}/integration/workspace"
+cd "${WORKSPACE}/integration-workspace"
 git checkout -b ${env.BRANCH_NAME}
 echo 1.0.0 > changes.txt
 git add .
