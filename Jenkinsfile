@@ -23,12 +23,12 @@ pipeline {
                             sh """
 printenv | sort
 cd 'integration/workspace'
-git checkout -b integration
+git checkout -b ${env.BRANCH_NAME}
 echo 1.0.0 > changes.txt
 git add .
 git commit -m "Update modules"
 git remote -v
-git push --set-upstream origin integration
+git push --set-upstream origin ${env.BRANCH_NAME}
 echo "No kurwa mać"
 """  
                         }
