@@ -3,6 +3,9 @@ pipeline {
     options {
         quietPeriod(0)
     }
+    environment {
+        REPO_NAME = 'optima-control-runtime'
+    }
     stages {
         stage('Setup') {
             steps {
@@ -21,13 +24,12 @@ pipeline {
                         sh """
 git clone git@github.com:zbtn/reimagined-palm-tree.git integration-workspace
 cd "${WORKSPACE}/integration-workspace"
-git checkout -b ${env.BRANCH_NAME}
+git checkout -b "${REPO_NAME}_${env.BRANCH_NAME}"
 echo 1.0.0 > changes.txt
 git add .
 git commit -m "Update modules"
 git remote -v
 git push --set-upstream origin ${env.BRANCH_NAME}
-echo "No kurwa mać"
 """  
                     }
                 }
