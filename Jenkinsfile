@@ -25,7 +25,7 @@ printenv | sort
 git checkout -b integration
 echo 1.0.0 > changes.txt
 git config --global user.email m.zbytniewski@microsolutions.pl
-git config --global user.name Jenkins
+git config --global user.name mzbytniewski-msol
 git add .
 git commit -m "Update modules"
 git remote -v
