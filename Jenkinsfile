@@ -28,6 +28,7 @@ pipeline {
                         sh """
 git clone git@github.com:zbtn/reimagined-palm-tree.git integration-workspace
 cd "${WORKSPACE}/integration-workspace"
+git branch -D "${env.INTEGRATION_BRANCH}"
 git checkout -b "${env.INTEGRATION_BRANCH}"
 echo 1.0.0 > changes.txt
 git add .
