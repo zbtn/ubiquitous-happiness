@@ -16,9 +16,9 @@ pipeline {
                 checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '**']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], userRemoteConfigs: [[credentialsId: 'github-ssh-key', name: 'workspace', url: 'git@github.com:zbtn/reimagined-palm-tree.git']]]
                 dir('integration/workspace') {
                     sh """
-git checkout -b ${BRANCH_NAME}
+git checkout -b integration
 echo 1.0.0 > changes.txt
-git push
+git push --set-upstream origin intergation
 """                    
                 }
             }
