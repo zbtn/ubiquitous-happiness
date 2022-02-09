@@ -28,6 +28,7 @@ git config --global user.email m.zbytniewski@microsolutions.pl
 git config --global user.name Jenkins
 git add .
 git commit -m "Update modules"
+git remote -v
 git push --set-upstream origin integration
 """  
                         }
