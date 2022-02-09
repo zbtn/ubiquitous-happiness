@@ -5,11 +5,15 @@ pipeline {
     }
     environment {
         REPO_NAME = 'optima-control-runtime'
+        SUBMODULE_NAME = 'ubiquitous-happiness'
     }
     stages {
         stage('Setup') {
             steps {
-                echo "Preparing build"
+                script{
+                    env.INTEGRATION_BRANCH = "${REPO_NAME}_${env.BRANCH_NAME}"
+
+                }
             }
         }
         stage('Pre-check') {
@@ -24,12 +28,12 @@ pipeline {
                         sh """
 git clone git@github.com:zbtn/reimagined-palm-tree.git integration-workspace
 cd "${WORKSPACE}/integration-workspace"
-git checkout -b "${REPO_NAME}_${env.BRANCH_NAME}"
+git checkout -b "${env.INTEGRATION_BRANCH}"
 echo 1.0.0 > changes.txt
 git add .
-git commit -m "Update modules"
+git commit -m "Update submodules"
 git remote -v
-git push --force --set-upstream origin "${REPO_NAME}_${env.BRANCH_NAME}"
+git push --force --set-upstream origin "${env.INTEGRATION_BRANCH}"
 git log --format=\"%H\" -n 1 > ${WORKSPACE}/last_hash
 """  
                     }
