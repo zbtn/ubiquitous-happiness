@@ -19,7 +19,7 @@ pipeline {
                 checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '**']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], userRemoteConfigs: [[credentialsId: 'github-ssh-key', name: 'workspace', url: 'git@github.com:zbtn/reimagined-palm-tree.git']]]
                 dir('integration/workspace') {
                     withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                        withEnv(["GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no l=git -i ${SSH_KEY}"]) {                        
+                        withEnv(["GIT_SSH_COMMAND=ssh -o StrictHostKeyChecking=no -l git -i ${SSH_KEY}"]) {                        
                             sh """
 printenv | sort
 git checkout -b integration
