@@ -14,7 +14,7 @@ pipeline {
         stage('Prepare integration branch') {
             steps {
                 dir('workspace') {
-                    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/none']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-ssh-key', name: 'workspace', url: 'git@github.com:zbtn/reimagined-palm-tree.git']]]
+                    checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '**']], extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '']], userRemoteConfigs: [[credentialsId: 'github-ssh-key', name: 'workspace', url: 'git@github.com:zbtn/reimagined-palm-tree.git']]]
                 }
             }
         }
