@@ -30,6 +30,8 @@ git add .
 git commit -m "Update modules"
 git remote -v
 git push --set-upstream origin ${env.BRANCH_NAME}
+mkdir -p ${WORKSPACE_TMP}
+git log --format=\"%H\" -n 1 > ${WORKSPACE_TMP}/last_hash
 """  
                     }
                 }
@@ -37,7 +39,10 @@ git push --set-upstream origin ${env.BRANCH_NAME}
         }
         stage('Trigger integration') {
             steps {
-                build job: 'Integration', parameters: [string(name: 'BRANCH', value: '')]
+                script {
+                    env.TRIGGER_REVISION = readFile '${WORKSPACE_TMP}/last_hash'
+                }
+                build job: 'Integration', parameters: [string(name: 'BRANCH', value: env.TRIGGER_REVISION)]
             }
         }
     }
